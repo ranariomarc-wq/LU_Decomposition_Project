@@ -1,99 +1,142 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #f5f7fb;
+
     margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
 }
 
 .container {
-    width: 85%;
+
+    width: 95%;
     margin: auto;
     padding: 20px;
 }
 
-h1 {
+.top-title {
+
     text-align: center;
-    color: #1f3b73;
+    margin-bottom: 20px;
+}
+
+.top-title h1 {
+
+    color: #1d3557;
     margin-bottom: 5px;
 }
 
-h2 {
-    text-align: center;
-    color: #555;
-    margin-top: 0;
+.layout {
+
+    display: flex;
+    gap: 20px;
+}
+
+.left-panel {
+
+    width: 65%;
+}
+
+.right-panel {
+
+    width: 35%;
 }
 
 .card {
+
     background: white;
-    padding: 25px;
-    margin-top: 25px;
+    padding: 20px;
     border-radius: 10px;
+    margin-bottom: 20px;
     box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
 }
 
-h3 {
-    color: #1f3b73;
-}
+h2 {
 
-.formula {
-    background: #eef3ff;
-    padding: 15px;
-    border-left: 5px solid #1f3b73;
-    margin: 15px 0;
-}
-
-.matrix {
-    background: #f9f9f9;
-    padding: 12px;
-    border-radius: 6px;
-    margin-top: 10px;
-    font-family: monospace;
+    color: #1d3557;
 }
 
 .matrix-row {
+
     margin-bottom: 10px;
 }
 
 .matrix-row input {
-    width: 70px;
+
+    width: 60px;
     padding: 10px;
-    margin-right: 8px;
+    margin-right: 5px;
     text-align: center;
 }
 
 button {
+
     margin-top: 15px;
     padding: 12px 20px;
     border: none;
-    background: #1f3b73;
+    background: #1d3557;
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
 }
 
 button:hover {
-    background: #16305f;
+
+    background: #16324f;
 }
 
 table {
+
     border-collapse: collapse;
     margin-top: 15px;
 }
 
 table td {
+
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 12px;
+    width: 60px;
     text-align: center;
-    width: 70px;
 }
 
-.results {
-    margin-top: 25px;
+.formula {
+
+    background: #eef4ff;
+    padding: 15px;
+    text-align: center;
+    font-size: 22px;
+    margin: 15px 0;
+    border-left: 5px solid #1d3557;
+}
+
+.steps {
+
+    max-height: 400px;
+    overflow-y: auto;
+    background: #f8f9fa;
+    padding: 10px;
+}
+
+.steps p {
+
+    margin: 8px 0;
+    font-family: monospace;
+}
+
+.matrix-box {
+
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+pre {
+
+    font-family: monospace;
 }
 
 .error {
-    margin-top: 20px;
-    color: red;
-    font-weight: bold;
+
+    background: #ffd6d6;
+    padding: 10px;
+    border-radius: 5px;
+    color: darkred;
 }
