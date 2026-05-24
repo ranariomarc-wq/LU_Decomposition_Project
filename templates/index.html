@@ -1,220 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LU Decomposition - Doolittle Method</title>
+
+    <title>LU Decomposition Calculator</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
 <body>
 
-    <div class="container">
+<div class="container">
+
+    <div class="top-title">
 
         <h1>LU Decomposition Calculator</h1>
-        <h2>Doolittle Method</h2>
 
-        <!-- Mathematical Discussion -->
-        <section class="card">
-            <h3>1. Mathematical Discussion</h3>
-
-            <p>
-                LU Decomposition is a matrix factorization technique where a square matrix A
-                is decomposed into:
-            </p>
-
-            <div class="formula">
-                A = LU
-            </div>
-
-            <p>
-                Where:
-            </p>
-
-            <ul>
-                <li><strong>L</strong> = Lower Triangular Matrix</li>
-                <li><strong>U</strong> = Upper Triangular Matrix</li>
-            </ul>
-
-            <p>
-                In the Doolittle Method, the diagonal elements of matrix L are always equal to 1.
-            </p>
-
-            <div class="formula">
-                L =
-                \[
-                \begin{bmatrix}
-                1 & 0 & 0 \\
-                l_{21} & 1 & 0 \\
-                l_{31} & l_{32} & 1
-                \end{bmatrix}
-                \]
-            </div>
-
-            <p>
-                This method is commonly used in solving systems of linear equations,
-                inverse matrices, and numerical analysis problems.
-            </p>
-        </section>
-
-        <!-- Worked Examples -->
-        <section class="card">
-            <h3>2. Worked Examples</h3>
-
-            <div class="example">
-                <h4>Example 1</h4>
-
-                <p>Given:</p>
-
-                <div class="matrix">
-                    A =
-                    [ 2  -1  -2 ]<br>
-                    [ -4  6  3 ]<br>
-                    [ -4 -2  8 ]
-                </div>
-
-                <p>
-                    Using Doolittle LU Decomposition:
-                </p>
-
-                <div class="matrix">
-                    L =
-                    [ 1  0  0 ]<br>
-                    [ -2 1  0 ]<br>
-                    [ -2 -1 1 ]
-                </div>
-
-                <div class="matrix">
-                    U =
-                    [ 2 -1 -2 ]<br>
-                    [ 0  4 -1 ]<br>
-                    [ 0  0  3 ]
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="example">
-                <h4>Example 2</h4>
-
-                <p>Given:</p>
-
-                <div class="matrix">
-                    A =
-                    [ 1  2  3 ]<br>
-                    [ 2  5  8 ]<br>
-                    [ 3  8 14 ]
-                </div>
-
-                <p>
-                    After decomposition:
-                </p>
-
-                <div class="matrix">
-                    L =
-                    [ 1 0 0 ]<br>
-                    [ 2 1 0 ]<br>
-                    [ 3 2 1 ]
-                </div>
-
-                <div class="matrix">
-                    U =
-                    [ 1 2 3 ]<br>
-                    [ 0 1 2 ]<br>
-                    [ 0 0 1 ]
-                </div>
-            </div>
-        </section>
-
-        <!-- Interactive Calculator -->
-        <section class="card">
-            <h3>3. Interactive Calculator</h3>
-
-            <form method="POST">
-
-                <label>Matrix Size:</label>
-
-                <select name="size" id="sizeSelect" onchange="generateMatrix()">
-                    <option value="2">2x2</option>
-                    <option value="3" selected>3x3</option>
-                    <option value="4">4x4</option>
-                </select>
-
-                <div id="matrixInputs"></div>
-
-                <button type="submit">Compute LU Decomposition</button>
-            </form>
-
-            {% if error %}
-                <div class="error">
-                    {{ error }}
-                </div>
-            {% endif %}
-
-            {% if L and U %}
-                <div class="results">
-
-                    <h4>Lower Triangular Matrix (L)</h4>
-
-                    <table>
-                        {% for row in L %}
-                        <tr>
-                            {% for value in row %}
-                            <td>{{ value }}</td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </table>
-
-                    <h4>Upper Triangular Matrix (U)</h4>
-
-                    <table>
-                        {% for row in U %}
-                        <tr>
-                            {% for value in row %}
-                            <td>{{ value }}</td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </table>
-
-                </div>
-            {% endif %}
-        </section>
+        <p>Doolittle Method</p>
 
     </div>
 
-    <script>
-        function generateMatrix() {
+    <div class="layout">
 
-            let size = document.getElementById("sizeSelect").value;
-            let container = document.getElementById("matrixInputs");
+        <!-- LEFT SIDE -->
+        <div class="left-panel">
 
-            container.innerHTML = "";
+            <div class="card">
 
-            for (let i = 0; i < size; i++) {
+                <h2>Matrix Input</h2>
 
-                let row = document.createElement("div");
-                row.className = "matrix-row";
+                <form method="POST">
 
-                for (let j = 0; j < size; j++) {
+                    <label>Select Matrix Size</label>
 
-                    let input = document.createElement("input");
+                    <select name="size" id="size" onchange="generateMatrix()">
 
-                    input.type = "number";
-                    input.step = "any";
-                    input.name = `cell_${i}_${j}`;
-                    input.required = true;
+                        <option value="2" {% if size == 2 %}selected{% endif %}>2x2</option>
+                        <option value="3" {% if size == 3 %}selected{% endif %}>3x3</option>
+                        <option value="4" {% if size == 4 %}selected{% endif %}>4x4</option>
 
-                    row.appendChild(input);
-                }
+                    </select>
 
-                container.appendChild(row);
-            }
+                    <div id="matrix-container"></div>
+
+                    <button type="submit">
+                        Calculate
+                    </button>
+
+                </form>
+
+            </div>
+
+            {% if error %}
+
+            <div class="error">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+            {% if L is not none %}
+
+            <div class="card">
+
+                <h2>Lower Matrix (L)</h2>
+
+                <table>
+
+                    {% for row in L %}
+                    <tr>
+
+                        {% for value in row %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+
+                    </tr>
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Upper Matrix (U)</h2>
+
+                <table>
+
+                    {% for row in U %}
+                    <tr>
+
+                        {% for value in row %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+
+                    </tr>
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Step-by-Step Solution</h2>
+
+                <div class="steps">
+
+                    {% for step in steps %}
+
+                    <p>{{ step }}</p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="right-panel">
+
+            <div class="card">
+
+                <h2>Mathematical Discussion</h2>
+
+                <p>
+                    LU decomposition factors a square matrix A into:
+                </p>
+
+                <div class="formula">
+                    A = LU
+                </div>
+
+                <p>
+                    Where:
+                </p>
+
+                <ul>
+                    <li>L = Lower Triangular Matrix</li>
+                    <li>U = Upper Triangular Matrix</li>
+                </ul>
+
+                <p>
+                    In Doolittle Method, the diagonal entries of L are always 1.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Worked Example 1</h2>
+
+                <div class="matrix-box">
+
+                    A =
+
+                    <pre>
+2  -1  -2
+-4  6   3
+-4 -2   8
+                    </pre>
+
+                </div>
+
+                <p>
+                    Result:
+                </p>
+
+                <pre>
+L =
+1   0   0
+-2  1   0
+-2 -1   1
+
+U =
+2  -1  -2
+0   4  -1
+0   0   3
+                </pre>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Worked Example 2</h2>
+
+                <div class="matrix-box">
+
+<pre>
+1  2  3
+2  5  8
+3  8 14
+</pre>
+
+                </div>
+
+                <pre>
+L =
+1 0 0
+2 1 0
+3 2 1
+
+U =
+1 2 3
+0 1 2
+0 0 1
+                </pre>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function generateMatrix() {
+
+    let size = document.getElementById("size").value;
+
+    let container = document.getElementById("matrix-container");
+
+    container.innerHTML = "";
+
+    for(let i = 0; i < size; i++) {
+
+        let row = document.createElement("div");
+
+        row.className = "matrix-row";
+
+        for(let j = 0; j < size; j++) {
+
+            let input = document.createElement("input");
+
+            input.type = "number";
+
+            input.step = "any";
+
+            input.required = true;
+
+            input.name = `cell_${i}_${j}`;
+
+            input.value = 0;
+
+            row.appendChild(input);
+
         }
 
-        generateMatrix();
-    </script>
+        container.appendChild(row);
+    }
+}
+
+generateMatrix();
+
+</script>
 
 </body>
 </html>
