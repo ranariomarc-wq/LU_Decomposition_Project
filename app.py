@@ -4,9 +4,9 @@ import numpy as np
 app = Flask(__name__)
 
 
-# -----------------------------
+# --------------------------------
 # MATRIX MULTIPLICATION
-# -----------------------------
+# --------------------------------
 def mult_matrix(M, N):
 
     tuple_N = list(zip(*N))
@@ -15,9 +15,9 @@ def mult_matrix(M, N):
              for col_n in tuple_N] for row_m in M]
 
 
-# -----------------------------
+# --------------------------------
 # PIVOT MATRIX
-# -----------------------------
+# --------------------------------
 def pivot_matrix(M):
 
     m = len(M)
@@ -34,9 +34,9 @@ def pivot_matrix(M):
     return identity
 
 
-# -----------------------------
+# --------------------------------
 # LU DECOMPOSITION
-# -----------------------------
+# --------------------------------
 def lu_decomposition(A):
 
     n = len(A)
@@ -49,7 +49,7 @@ def lu_decomposition(A):
     # Pivot Matrix
     P = pivot_matrix(A)
 
-    # Multiply P*A
+    # PA
     PA = mult_matrix(P, A)
 
     # Decomposition
@@ -82,9 +82,9 @@ def lu_decomposition(A):
     return P, L, U, PA, steps
 
 
-# -----------------------------
-# HOME PAGE
-# -----------------------------
+# --------------------------------
+# HOME ROUTE
+# --------------------------------
 @app.route("/", methods=["GET", "POST"])
 def index():
 
