@@ -4,57 +4,96 @@ import numpy as np
 app = Flask(__name__)
 
 
-def lu_doolittle(A):
+# -----------------------------
+# MATRIX MULTIPLICATION
+# -----------------------------
+def mult_matrix(M, N):
+
+    tuple_N = list(zip(*N))
+
+    return [[sum(el_m * el_n for el_m, el_n in zip(row_m, col_n))
+             for col_n in tuple_N] for row_m in M]
+
+
+# -----------------------------
+# PIVOT MATRIX
+# -----------------------------
+def pivot_matrix(M):
+
+    m = len(M)
+
+    identity = [[float(i == j) for i in range(m)] for j in range(m)]
+
+    for j in range(m):
+
+        row = max(range(j, m), key=lambda i: abs(M[i][j]))
+
+        if j != row:
+            identity[j], identity[row] = identity[row], identity[j]
+
+    return identity
+
+
+# -----------------------------
+# LU DECOMPOSITION
+# -----------------------------
+def lu_decomposition(A):
+
     n = len(A)
 
-    L = np.zeros((n, n))
-    U = np.zeros((n, n))
+    L = [[0.0] * n for i in range(n)]
+    U = [[0.0] * n for i in range(n)]
 
     steps = []
 
-    for i in range(n):
-        L[i][i] = 1
+    # Pivot Matrix
+    P = pivot_matrix(A)
 
+    # Multiply P*A
+    PA = mult_matrix(P, A)
+
+    # Decomposition
     for j in range(n):
 
-        # Compute U
+        L[j][j] = 1.0
+
+        # Upper Matrix
         for i in range(j + 1):
 
-            sum_val = 0
+            s1 = sum(U[k][j] * L[i][k] for k in range(i))
 
-            for k in range(i):
-                sum_val += L[i][k] * U[k][j]
-
-            U[i][j] = A[i][j] - sum_val
+            U[i][j] = PA[i][j] - s1
 
             steps.append(
-                f"U[{i+1}][{j+1}] = {A[i][j]} - {round(sum_val,4)} = {round(U[i][j],4)}"
+                f"U[{i+1}][{j+1}] = {PA[i][j]} - {round(s1,4)} = {round(U[i][j],4)}"
             )
 
-        # Compute L
+        # Lower Matrix
         for i in range(j, n):
 
-            sum_val = 0
+            s2 = sum(U[k][j] * L[i][k] for k in range(j))
 
-            for k in range(j):
-                sum_val += L[i][k] * U[k][j]
-
-            L[i][j] = (A[i][j] - sum_val) / U[j][j]
+            L[i][j] = (PA[i][j] - s2) / U[j][j]
 
             steps.append(
-                f"L[{i+1}][{j+1}] = ({A[i][j]} - {round(sum_val,4)}) / {round(U[j][j],4)} = {round(L[i][j],4)}"
+                f"L[{i+1}][{j+1}] = ({PA[i][j]} - {round(s2,4)}) / {round(U[j][j],4)} = {round(L[i][j],4)}"
             )
 
-    return L, U, steps
+    return P, L, U, PA, steps
 
 
+# -----------------------------
+# HOME PAGE
+# -----------------------------
 @app.route("/", methods=["GET", "POST"])
 def index():
 
     size = 3
-    matrix = None
+
+    P = None
     L = None
     U = None
+    PA = None
     steps = []
     error = None
 
@@ -78,22 +117,24 @@ def index():
 
                 matrix.append(row)
 
-            A = np.array(matrix)
+            P, L, U, PA, steps = lu_decomposition(matrix)
 
-            L, U, steps = lu_doolittle(A)
-
-            L = np.round(L, 4)
-            U = np.round(U, 4)
+            P = np.round(np.array(P), 4)
+            L = np.round(np.array(L), 4)
+            U = np.round(np.array(U), 4)
+            PA = np.round(np.array(PA), 4)
 
         except Exception as e:
+
             error = str(e)
 
     return render_template(
         "index.html",
         size=size,
-        matrix=matrix,
+        P=P,
         L=L,
         U=U,
+        PA=PA,
         steps=steps,
         error=error
     )
