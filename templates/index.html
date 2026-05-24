@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
@@ -15,22 +16,23 @@
 
 <div class="container">
 
-    <div class="top-title">
+    <div class="header">
 
         <h1>LU Decomposition Calculator</h1>
 
-        <p>Doolittle Method</p>
+        <p>Doolittle Method with Partial Pivoting</p>
 
     </div>
 
     <div class="layout">
 
-        <!-- LEFT SIDE -->
+        <!-- LEFT PANEL -->
         <div class="left-panel">
 
+            <!-- INPUT -->
             <div class="card">
 
-                <h2>Matrix Input</h2>
+                <h2>Interactive Calculator</h2>
 
                 <form method="POST">
 
@@ -47,7 +49,7 @@
                     <div id="matrix-container"></div>
 
                     <button type="submit">
-                        Calculate
+                        Compute LU Decomposition
                     </button>
 
                 </form>
@@ -64,9 +66,52 @@
 
             {% if L is not none %}
 
+            <!-- P MATRIX -->
             <div class="card">
 
-                <h2>Lower Matrix (L)</h2>
+                <h2>Pivot Matrix (P)</h2>
+
+                <table>
+
+                    {% for row in P %}
+                    <tr>
+
+                        {% for value in row %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+
+                    </tr>
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+            <!-- PA MATRIX -->
+            <div class="card">
+
+                <h2>Permuted Matrix (PA)</h2>
+
+                <table>
+
+                    {% for row in PA %}
+                    <tr>
+
+                        {% for value in row %}
+                        <td>{{ value }}</td>
+                        {% endfor %}
+
+                    </tr>
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+            <!-- L MATRIX -->
+            <div class="card">
+
+                <h2>Lower Triangular Matrix (L)</h2>
 
                 <table>
 
@@ -84,9 +129,10 @@
 
             </div>
 
+            <!-- U MATRIX -->
             <div class="card">
 
-                <h2>Upper Matrix (U)</h2>
+                <h2>Upper Triangular Matrix (U)</h2>
 
                 <table>
 
@@ -104,6 +150,7 @@
 
             </div>
 
+            <!-- STEPS -->
             <div class="card">
 
                 <h2>Step-by-Step Solution</h2>
@@ -124,15 +171,16 @@
 
         </div>
 
-        <!-- RIGHT SIDE -->
+        <!-- RIGHT PANEL -->
         <div class="right-panel">
 
+            <!-- DISCUSSION -->
             <div class="card">
 
-                <h2>Mathematical Discussion</h2>
+                <h2>1. Mathematical Discussion</h2>
 
                 <p>
-                    LU decomposition factors a square matrix A into:
+                    LU Decomposition is a matrix factorization method where:
                 </p>
 
                 <div class="formula">
@@ -140,79 +188,104 @@
                 </div>
 
                 <p>
-                    Where:
+                    When partial pivoting is used, the equation becomes:
                 </p>
 
+                <div class="formula">
+                    PA = LU
+                </div>
+
                 <ul>
-                    <li>L = Lower Triangular Matrix</li>
-                    <li>U = Upper Triangular Matrix</li>
+                    <li><strong>P</strong> = Pivot Matrix</li>
+                    <li><strong>L</strong> = Lower Triangular Matrix</li>
+                    <li><strong>U</strong> = Upper Triangular Matrix</li>
                 </ul>
 
                 <p>
-                    In Doolittle Method, the diagonal entries of L are always 1.
+                    The Doolittle Method assumes that all diagonal entries
+                    of matrix L are equal to 1.
                 </p>
+
+                <p>
+                    This method is widely used in Numerical Methods for:
+                </p>
+
+                <ul>
+                    <li>Solving systems of linear equations</li>
+                    <li>Matrix inversion</li>
+                    <li>Engineering computations</li>
+                    <li>Scientific computing</li>
+                </ul>
 
             </div>
 
+            <!-- EXAMPLE 1 -->
             <div class="card">
 
-                <h2>Worked Example 1</h2>
+                <h2>2. Worked Example 1</h2>
 
-                <div class="matrix-box">
+<pre>
+A =
 
-                    A =
+| 2  -1  -2 |
+| -4  6   3 |
+| -4 -2   8 |
+</pre>
 
-                    <pre>
-2  -1  -2
--4  6   3
--4 -2   8
-                    </pre>
+                <p>
+                    Using Doolittle LU Decomposition:
+                </p>
 
-                </div>
+<pre>
+L =
+
+| 1   0   0 |
+| -2  1   0 |
+| -2 -1   1 |
+</pre>
+
+<pre>
+U =
+
+| 2 -1 -2 |
+| 0  4 -1 |
+| 0  0  3 |
+</pre>
+
+            </div>
+
+            <!-- EXAMPLE 2 -->
+            <div class="card">
+
+                <h2>3. Worked Example 2</h2>
+
+<pre>
+A =
+
+| 1  2  3 |
+| 2  5  8 |
+| 3  8 14 |
+</pre>
 
                 <p>
                     Result:
                 </p>
 
-                <pre>
-L =
-1   0   0
--2  1   0
--2 -1   1
-
-U =
-2  -1  -2
-0   4  -1
-0   0   3
-                </pre>
-
-            </div>
-
-            <div class="card">
-
-                <h2>Worked Example 2</h2>
-
-                <div class="matrix-box">
-
 <pre>
-1  2  3
-2  5  8
-3  8 14
+L =
+
+| 1 0 0 |
+| 2 1 0 |
+| 3 2 1 |
 </pre>
 
-                </div>
-
-                <pre>
-L =
-1 0 0
-2 1 0
-3 2 1
-
+<pre>
 U =
-1 2 3
-0 1 2
-0 0 1
-                </pre>
+
+| 1 2 3 |
+| 0 1 2 |
+| 0 0 1 |
+</pre>
 
             </div>
 
@@ -253,7 +326,6 @@ function generateMatrix() {
             input.value = 0;
 
             row.appendChild(input);
-
         }
 
         container.appendChild(row);
